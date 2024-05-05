@@ -1,0 +1,28 @@
+{
+  "name": "logger-fusion",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "description": "",
+  "homepage": "https://github.com/ncostamagna/logger-fusion#readme",
+  "scripts": {
+    "build": "rm -rf ./lib && tsc",
+    "prepublish": "npm run build"
+  },
+  "files": [
+    "/lib",
+    "/index.d.ts"
+  ],
+  "author": "Nahuel Costamagna",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ncostamagna/logger-fusion.git"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
+  "version": "1.0.1"
+}
