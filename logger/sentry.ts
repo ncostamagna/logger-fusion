@@ -1,4 +1,5 @@
 import { ILogger } from "./logger";
+import {TRACE} from './trace';
 
 export interface Sentry {
     captureMessage(msg: any):void;
@@ -8,25 +9,25 @@ export interface Sentry {
 export class SentryLog implements ILogger {
 
     private sentry:Sentry;
-    private isDebbug:boolean;
-    constructor(sentry:Sentry, isDebbug:boolean){
+    private trace:number;
+    constructor(sentry:Sentry, trace:number){
         this.sentry = sentry;
-        this.isDebbug = isDebbug;
+        this.trace = trace;
     }
 
-    logError(err:Error){
-        this.sentry.captureException(err);
+    debbug(msg:string){
+        (this.trace & TRACE.DEBBUG_LOG) && this.sentry.captureMessage(msg);
     }
 
-    logMessage(msg:string){
-        this.sentry.captureMessage(msg);
+    info(msg:string){
+        (this.trace & TRACE.INFO_LOG) && this.sentry.captureMessage(msg);
     }
 
-    debbugError(err:Error){
-        this.isDebbug && this.logError(err);
+    warn(err:Error | string){
+        (this.trace & TRACE.WARNING_LOG) && this.sentry.captureException(err);
     }
 
-    debbugMessage(err:string){
-        this.isDebbug && this.logMessage(err);
+    error(err:Error | string){
+        (this.trace & TRACE.ERROR_LOG) && this.sentry.captureException(err);
     }
 }

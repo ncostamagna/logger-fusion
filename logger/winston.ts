@@ -1,32 +1,36 @@
 import { ILogger } from "./logger";
+import {TRACE} from './trace';
 
 export interface Winston {
-    log(...msg: any[]):void;
-    error(...err: any[]):void;
+    debug(msg: string):void;
+    info(msg: string):void;
+    warn(err: Error | string):void;
+    error(err: Error | string):void;
 }
 
 export class WinstonLog implements ILogger {
 
     private winston:Winston;
-    private isDebbug:boolean;
-    constructor(winston:Winston, isDebbug:boolean){
+    private trace:number;
+
+    constructor(winston:Winston, trace:number){
         this.winston = winston;
-        this.isDebbug = isDebbug;
+        this.trace = trace;
     }
 
-    logError(err:Error){
-        this.winston.error(`${err.name}: ${err.message}`);
+    debbug(msg:string){
+        (this.trace & TRACE.DEBBUG_LOG) && this.winston.debug(msg);
     }
 
-    logMessage(msg:string){
-        this.winston.log(msg);
+    info(msg:string){
+        (this.trace & TRACE.INFO_LOG) && this.winston.info(msg);
     }
 
-    debbugError(err:Error){
-        this.isDebbug && this.logError(err);
+    warn(err:Error | string){
+        (this.trace & TRACE.WARNING_LOG) && this.winston.warn(err);
     }
 
-    debbugMessage(err:string){
-        this.isDebbug && this.logMessage(err);
+    error(err:Error | string){
+        (this.trace & TRACE.ERROR_LOG) && this.winston.error(err);
     }
 }

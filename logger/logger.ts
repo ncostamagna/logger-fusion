@@ -1,30 +1,32 @@
 export interface ILogger {
-    logError(err:Error):void,
-    logMessage(msg:string):void,
-    debbugError(err:Error):void,
-    debbugMessage(err:string):void,
+    debbug(msg:string):void,
+    info(msg:string):void,
+    warn(msg:Error | string):void,
+    error(err:Error | string):void,
 } 
 
 
 export class Logger implements ILogger {
+    private debugMode: boolean;
     private logConfig: ILogger[];
-    constructor(...logConfig:ILogger[]){
+    constructor(debugMode: boolean, ...logConfig:ILogger[]){
+        this.debugMode = debugMode;
         this.logConfig = logConfig;
     }
 
-    logError(err:Error){
-        this.logConfig.map((config)=>config.logError(err));
+    debbug(msg:string){
+        this.debugMode && this.logConfig.map((log)=>log.debbug(msg))
+    }
+    
+    info(msg:string){
+        this.logConfig.map((log)=>log.info(msg))
     }
 
-    logMessage(msg:string){
-        this.logConfig.map((config)=>config.logMessage(msg));
+    warn(err:Error | string){
+        this.logConfig.map((log)=>log.warn(err))
     }
 
-    debbugError(err:Error){
-        this.logConfig.map((config) => config.debbugError(err));
-    }
-
-    debbugMessage(msg:string){
-        this.logConfig.map((config) => config.debbugMessage(msg));
+    error(err:Error | string){
+        this.logConfig.map((log)=>log.error(err))
     }
 }
