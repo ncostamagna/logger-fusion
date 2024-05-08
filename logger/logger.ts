@@ -7,15 +7,13 @@ export interface ILogger {
 
 
 export class Logger implements ILogger {
-    private debugMode: boolean;
     private logConfig: ILogger[];
-    constructor(debugMode: boolean, ...logConfig:ILogger[]){
-        this.debugMode = debugMode;
+    constructor(...logConfig:ILogger[]){
         this.logConfig = logConfig;
     }
 
     debbug(msg:string){
-        this.debugMode && this.logConfig.map((log)=>log.debbug(msg))
+        this.logConfig.map((log)=>log.debbug(msg))
     }
     
     info(msg:string){
